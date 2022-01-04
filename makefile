@@ -1,14 +1,14 @@
 CC=g++
 CPPFLAGS= -std=c++11 -Wall -I $(INCDIR)
-EXEC=driver
+EXEC=driver.exe
 
-OBJDIR=.#/obj
+OBJDIR=./obj
 OBJ=$(addprefix $(OBJDIR)/,$(EXEC).o,MTT_Board.o,Solver.o)
 
-INCDIR=.#/inc
+INCDIR=./inc
 INC=$(addprefix $(INCDIR)/,MTT_Board.h,Solver.h)
 
-SRCDIR=.#/src
+SRCDIR=./src
 SRC=$(addprefix $(SRCDIR)/,$(EXEC).cpp,MTT_Board.cpp,Solver.cpp)
 
 
