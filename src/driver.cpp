@@ -88,7 +88,8 @@ void testCustomPosition()
 	testPosition = "X4/5/5 O";
 	board = MTT_Board(testPosition);
 
-	std::cout << (board.getBoardPosition() == testPosition ? "Position set correctly." : "Something went wrong.") << std::endl;
+	std::cout << (board.getBoardPosition() == testPosition
+			? "Position set correctly." : "Something went wrong.") << std::endl;
 }
 
 void testMoves()
