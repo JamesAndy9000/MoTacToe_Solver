@@ -406,7 +406,7 @@ bool MTT_Board::traceLine(Position targetPos, int rowIncrease, int colIncrease) 
 			checkPos.col = targetPos.col + colDistance;
 
 			checkForwardLine = checkLineForMatch(checkPos, targetSymbol,
-												numInARow, result);
+				numInARow, result);
 			if (result)
 			{
 				break;
