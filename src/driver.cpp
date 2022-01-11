@@ -8,6 +8,8 @@ void testCustomPosition();
 void testMoves();
 void testUndo();
 void testGameOver();
+void userFinishesGame(MTT_Board& board);
+
 
 int main(int argc, char** argv)
 {
@@ -63,6 +65,7 @@ void printMenu()
 	std::cout << "Q: Quit.\n";
 }
 
+
 //Simply run the blank constructor and ensure everything is set up correctly.
 void testEmptyBoard()
 {
@@ -80,6 +83,7 @@ void testEmptyBoard()
 	std::cout << std::endl;
 }
 
+
 void testCustomPosition()
 {
 	MTT_Board board;
@@ -91,6 +95,7 @@ void testCustomPosition()
 	std::cout << (board.getBoardPosition() == testPosition
 			? "Position set correctly." : "Something went wrong.") << std::endl;
 }
+
 
 void testMoves()
 {
@@ -131,11 +136,32 @@ void testMoves()
  *Test after each move to make sure it does end in a draw.*/
 void testGameOver()
 {
-	MTT_Board board = MTT_Board();
+	std::cout << "Preparing to test vertical win.\n";
+
+	MTT_Board board = MTT_Board("XOY2/5/XOY2 X");
+	std::cout << "Initial board position: " << board.getBoardPosition() << "\n\n";
+
+	//Keep getting user inputs until the game ends.
+	userFinishesGame(board);
+
+	//Reset the board; set up a horizontal win.
+	board = MTT_Board("XX3/OO3/YY3 X");
+	
+	std::cout << "Current position: " << board.getBoardPosition() << "\n\n";
+
+	//Gather user input, see how board responds.
+	userFinishesGame(board);
+}
+
+
+/* Keep getting user inputs until the game ends.
+ * this does alter the state of `board`, but that doesn't matter since it will
+ * typically be reset shortly afterwards anyway.*/
+void userFinishesGame(MTT_Board& board)
+{
 	int row, col;
 	char winner;
 
-	//Gather inputs from the user. Stop once the game ends.
 	do
 	{
 		//Get the row and column from the user and make the move.
@@ -159,7 +185,8 @@ void testGameOver()
 	}while (!(board.isOver()));
 
 	winner = board.getWinner();
-	//Once the game ends, make sure the board recognizes that it's a draw.
+	
+	//Once the game ends, make sure the board recognizes whether it's a draw.
 	if (winner == ' ')
 		std::cout << "Game ended in a draw.\n\n";
 
