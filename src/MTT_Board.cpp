@@ -237,8 +237,8 @@ bool MTT_Board::makeMove(s_t row, s_t column)
 			s_t playerIndex = (numberOfMoves) % NUM_PLAYERS;
 			turnPlayer = players[playerIndex];
 		}
-		return successfulMove;
 	}
+	return successfulMove;
 }
 
 
@@ -376,7 +376,9 @@ bool MTT_Board::isWinningMove(Position targetPos)
  *Lines stop emanating once a non-matching symbol is found, or line goes out of bounds.*/
 bool MTT_Board::traceLine(Position targetPos, int rowIncrease, int colIncrease) const
 {
-	bool result;					//Flag for whether or not a complete line has been found
+	bool result = false;			//Flag for whether or not a complete line has been found
+									//Start by assuming it isn't.
+
 	int rowDistance, colDistance;	//Distance between checked square and target.
 	Position checkPos;				//Coordinates for the current square to be checked.
 	int numInARow = 1;
