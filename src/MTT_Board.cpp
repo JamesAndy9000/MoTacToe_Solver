@@ -382,7 +382,10 @@ bool MTT_Board::traceLine(Position targetPos, int rowIncrease, int colIncrease) 
 	int rowDistance, colDistance;	//Distance between checked square and target.
 	Position checkPos;				//Coordinates for the current square to be checked.
 	int numInARow = 1;
-	bool checkForwardLine, checkBackwardLine = true;	//flags for checking in either direction.
+
+	//flags for checking in either direction.
+	bool checkForwardLine = true;
+	bool checkBackwardLine = true;
 
 	Token targetSymbol = getToken(targetPos);	//Symbol each square will be compared to.
 
