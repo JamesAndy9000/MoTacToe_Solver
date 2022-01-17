@@ -57,8 +57,9 @@ class MTT_Board
 		s_t numberOfMoves;
 		
 		
-		/*Returns a bool representing whether a target position is in bounds.
-		 *Returns true if it is, returns false if it is not.*/
+		/*Returns a bool representing whether a target position
+		 *is in bounds. Returns true if it is, returns false if it
+		 *is not.*/
 		bool boxInBounds(Position target) const;
 		
 		
@@ -133,10 +134,12 @@ class MTT_Board
 		MTT_Board(const std::string boardPosition);
 
 
-		/*PLaces an X, O, or Y in the desired square, depending on current turn player.
+		/*Places an X, O, or Y in the desired square,
+		 *depending on current turn player.
 		 *Arguments are accepted based on storage coordinates,
 		 *ie. [0 - (ROWS-1)] and [0 - (COLUMNS - 1)], respectively.
-		 *Returns false iff the move is out of bounds, or the target square is already occupied*/
+		 *Returns false iff the move is out of bounds,
+		 *or the target square is already occupied*/
 		bool makeMove(s_t row, s_t column);
 		
 		
