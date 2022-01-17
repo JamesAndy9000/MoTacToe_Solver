@@ -136,62 +136,55 @@ void testMoves()
  *Test after each move to make sure it does end in a draw.*/
 void testGameOver()
 {
-	std::cout << "Preparing to test vertical win.\n";
+	MTT_Board board = MTT_Board();
 
-	MTT_Board board = MTT_Board("XOY2/5/XOY2 X");
-	std::cout << "Initial board position: " << board.getBoardPosition() << "\n\n";
-
-	//Keep getting user inputs until the game ends.
-	userFinishesGame(board);
-
-	//Reset the board; set up a horizontal win.
-	board = MTT_Board("XX3/OO3/YY3 X");
-	
-	std::cout << "Current position: " << board.getBoardPosition() << "\n\n";
-
-	//Gather user input, see how board responds.
-	userFinishesGame(board);
-}
-
-
-/* Keep getting user inputs until the game ends.
- * this does alter the state of `board`, but that doesn't matter since it will
- * typically be reset shortly afterwards anyway.*/
-void userFinishesGame(MTT_Board& board)
-{
-	int row, col;
-	char winner;
-
-	do
+	auto isWon = [&board](s_t row, s_t col)
 	{
-		//Get the row and column from the user and make the move.
-		std::cout << "Enter the array index for `row`: ";
-		std::cin >> row;
-		std::cin.ignore();
+		std::cout << "Old: " << board.getBoardPosition() << "\n";
+		board.makeMove(row, col);
 
-		std::cout << "Enter the array index for `col`: ";
-		std::cin >> col;
-		std::cin.ignore();
+		std::cout << "New: " << board.getBoardPosition() << "\n";
 
-		if (board.makeMove(row, col))
-		{
-			//Show the board so far to make sure everything's right.
-			std::cout << "\n Current board position: " << board.getBoardPosition() << "\n\n";
-		}
-		else
-		{
-			std::cout << "Move is invalid. Try again.\n";
-		}
-	}while (!(board.isOver()));
+		std::cout << (board.getWinner() == 'X'
+				? "Test passed.\n\n"
+				: "Test failed.\n\n");
+	};
 
-	winner = board.getWinner();
+	//Vertical wins
+	std::cout << "Vertical wins...\n";
+
+	//Winner on top
+	std::cout << "Winner on top:\n";
+	board = MTT_Board("1OY2/XOY2/X4 X");
+	isWon(0, 0);
+
+	//Winner in middle
+	std::cout << "Winner in middle:\n";
+	board = MTT_Board("XOY2/1OY2/X4 X");
+	isWon(1, 0);
 	
-	//Once the game ends, make sure the board recognizes whether it's a draw.
-	if (winner == ' ')
-		std::cout << "Game ended in a draw.\n\n";
+	//Winner on bottom
+	std::cout << "Winner on bottom:\n";
+	board = MTT_Board("XOY2/XOY2/5 X");
+	isWon(2, 0);
+	
 
-	else
-		std::cout << "Game ended in a victory for " << winner << ".\n\n";
+	//Horizontal wins
+	//Winner on left
+	
+	//Winner in middle
+	
+	//Winner on right
+	
+
+	//Diagonal wins
+	//Winner top-left
+	
+	//Winner top-right
+	
+	//Winner bottom-left
+	
+	//Winner bottom-right
 }
 
 
