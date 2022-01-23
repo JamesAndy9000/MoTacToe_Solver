@@ -155,36 +155,67 @@ void testGameOver()
 
 	//Winner on top
 	std::cout << "Winner on top:\n";
-	board = MTT_Board("1OY2/XOY2/X4 X");
+	board.setBoard("1OY2/XOY2/X4 X");
 	isWon(0, 0);
 
 	//Winner in middle
 	std::cout << "Winner in middle:\n";
-	board = MTT_Board("XOY2/1OY2/X4 X");
+	board.setBoard("XOY2/1OY2/X4 X");
 	isWon(1, 0);
 	
 	//Winner on bottom
 	std::cout << "Winner on bottom:\n";
-	board = MTT_Board("XOY2/XOY2/5 X");
+	board.setBoard("XOY2/XOY2/5 X");
 	isWon(2, 0);
+	std::cout << "\n";
 	
 
 	//Horizontal wins
+	std::cout << "Horizontal wins...\n";
+
 	//Winner on left
-	
+	std::cout << "Winner on left:\n";
+	board.setBoard("1XX2/1OO2/1YY2 X");
+	isWon(0, 0);
+
 	//Winner in middle
-	
+	std::cout << "Winner in middle:\n";
+	board.setBoard("X1X2/O1O2/Y1Y2 X");
+	isWon(0, 1);
+
 	//Winner on right
-	
+	std::cout << "Winner on right:\n";
+	board.setBoard("XX3/OO3/YY3 X");
+	isWon(0, 2);
+	std::cout << "\n";
 
 	//Diagonal wins
+	std::cout << "Diagonal wins...\n";
+
 	//Winner top-left
-	
+	std::cout << "Winner top-left:\n";
+	board.setBoard("5/1X3/2X2 X");
+	isWon(0, 0);
+
 	//Winner top-right
-	
+	std::cout << "Winner top-right:\n";
+	board.setBoard("5/1X3/X4 X");
+	isWon(0, 2);
+
 	//Winner bottom-left
-	
+	std::cout << "Winner bottom-left:\n";
+	board.setBoard("2X2/1X3/5 X");
+	isWon(2, 0);
+
 	//Winner bottom-right
+	std::cout << "Winner bottom-right:\n";
+	board.setBoard("X4/1X3/5 X");
+	isWon(2, 2);
+	
+	//Winner center
+	std::cout << "Winner center:\n";
+	board.setBoard("X4/5/2X2 X");
+	isWon(1, 1);
 }
 
 
