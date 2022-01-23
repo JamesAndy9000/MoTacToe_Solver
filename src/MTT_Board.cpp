@@ -1,4 +1,5 @@
 #include "MTT_Board.h"
+#include <cmath>	//abs()
 
 
 //Public Functions
@@ -30,16 +31,17 @@ MTT_Board::MTT_Board(std::string boardPosition)
 {
 	numberOfMoves = 0;
 	gameOver = false;
+
 	enum State { FILL_BOARD, GET_TURN };
 	State curState = FILL_BOARD;
 	Position curPos{0, 0};
 	bool positionComplete = false;
-	s_t squaresFilled = 0;
-	s_t totalSquares = 0;
-	s_t consecutiveBlanks = 0;
+	uint16_t squaresFilled = 0;
+	uint16_t totalSquares = 0;
+	uint8_t consecutiveBlanks = 0;
 	char curChar;
 
-	//Analyze the portion of the string which depicts the placement of tokens on the board.*/
+	//Analyze the portion of the string which depicts the placement of tokens on the board.
 	for (s_t index = 0; index < boardPosition.size(); index++)
 	{
 		curChar = boardPosition[index];
@@ -194,7 +196,7 @@ MTT_Board::MTT_Board(std::string boardPosition)
 
 /*After verifying the desired move is in bounds and empty, places the turn player's token there.
  *Returns true iff the token was placed successfully.*/
-bool MTT_Board::makeMove(s_t row, s_t column)
+bool MTT_Board::makeMove(uint8_t row, uint8_t column)
 {
 	bool successfulMove;
 
@@ -313,7 +315,7 @@ std::string MTT_Board::getBoardPosition() const
 }
 
 
-bool MTT_Board::undoMove(s_t row, s_t col)
+bool MTT_Board::undoMove(uint8_t row, uint8_t col)
 {
 	Position target = {row, col};
 	if (!(this->boxInBounds(target)))
@@ -379,9 +381,9 @@ bool MTT_Board::traceLine(Position targetPos, int rowIncrease, int colIncrease) 
 	bool result = false;			//Flag for whether or not a complete line has been found
 									//Start by assuming it isn't.
 
-	int rowDistance, colDistance;	//Distance between checked square and target.
+	int16_t rowDistance, colDistance;	//Distance between checked square and target.
 	Position checkPos;				//Coordinates for the current square to be checked.
-	int numInARow = 1;
+	uint8_t numInARow = 1;
 
 	//flags for checking in either direction.
 	bool checkForwardLine = true;
@@ -393,7 +395,7 @@ bool MTT_Board::traceLine(Position targetPos, int rowIncrease, int colIncrease) 
 	 *search goes out of bounds, or distance from target becomes so great as to not matter.
 	 *Exit function early if the number of matches found equals a win.*/
 	for (rowDistance = rowIncrease, colDistance = colIncrease;
-		 (rowDistance < NUM_TO_WIN) && (colDistance < NUM_TO_WIN);
+		 (((uint16_t) abs(rowDistance)) < NUM_TO_WIN) && (((uint16_t) abs(colDistance)) < NUM_TO_WIN);
 		 rowDistance+=rowIncrease, colDistance+=colIncrease)
 	{
 		/*If both lines have been cut, then there's no need to continue checking.*/
@@ -411,9 +413,11 @@ bool MTT_Board::traceLine(Position targetPos, int rowIncrease, int colIncrease) 
 			checkPos.col = targetPos.col + colDistance;
 
 			checkForwardLine = checkLineForMatch(checkPos, targetSymbol,
-				numInARow, result);
-			if (result)
+				numInARow);
+
+			if (numInARow == NUM_TO_WIN)
 			{
+				result = true;
 				break;
 			}
 		}
@@ -425,9 +429,11 @@ bool MTT_Board::traceLine(Position targetPos, int rowIncrease, int colIncrease) 
 			checkPos.col = targetPos.col - colDistance;
 
 			checkBackwardLine = checkLineForMatch(checkPos, targetSymbol,
-												numInARow, result);
-			if (result)
+				numInARow);
+
+			if (numInARow == NUM_TO_WIN)
 			{
+				result = true;
 				break;
 			}
 		}
@@ -439,16 +445,12 @@ bool MTT_Board::traceLine(Position targetPos, int rowIncrease, int colIncrease) 
 
 /**/
 bool MTT_Board::checkLineForMatch(Position checkPos, char targetSymbol,
-								int& numInARow, bool& isWinning) const
+								uint8_t& numInARow) const
 {
-	if (boxInBounds(checkPos)
+	if ((boxInBounds(checkPos))
 		&& (getToken(checkPos) == targetSymbol))
 	{
 		numInARow++;
-		if(numInARow == NUM_TO_WIN)
-		{
-			isWinning = true;
-		}
 		return true;
 	}
 	else
@@ -458,7 +460,7 @@ bool MTT_Board::checkLineForMatch(Position checkPos, char targetSymbol,
 }
 
 
-void MTT_Board::placeSpaces(Position position, s_t spaces)
+void MTT_Board::placeSpaces(Position position, uint8_t spaces)
 {
 	for (s_t space = 0; space < spaces; space++)
 	{
