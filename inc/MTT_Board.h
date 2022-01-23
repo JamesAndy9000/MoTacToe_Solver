@@ -9,9 +9,9 @@ typedef std::size_t s_t;
 
 
 const s_t NUM_PLAYERS = 3;
-const s_t ROWS = 3;
-const s_t COLUMNS = 5;
-const s_t NUM_TO_WIN = 3;
+const uint8_t ROWS = 3;
+const uint8_t COLUMNS = 5;
+const uint8_t NUM_TO_WIN = 3;
 enum Token{X = 'X', O = 'O', Y = 'Y', NONE = ' '};
 const Token players[] = {X, O, Y, NONE};
 
@@ -19,8 +19,8 @@ const Token players[] = {X, O, Y, NONE};
 /*Represents a specific square inside the game board, noted by its row and column.*/
 struct Position
 {
-	s_t row;
-	s_t col;
+	uint8_t row;
+	uint8_t col;
 };
 
 
@@ -54,7 +54,7 @@ class MTT_Board
 		
 		/*Moves since the game started.
 		 *Also used to help keep track of the turn player using modulo.*/
-		s_t numberOfMoves;
+		uint16_t numberOfMoves;
 		
 		
 		/*Returns a bool representing whether a target position
@@ -82,7 +82,7 @@ class MTT_Board
 		 *Checks the selected square to make sure it matches the target symbol,
 		 *and determines wheteher or not the loop should continue.*/
 		bool checkLineForMatch(Position checkPos, char targetSymbol,
-							 int& numInARow, bool& isWinning) const;
+							 uint8_t& numInARow) const;
 		
 		
 		/*Returns a copy of the symbol indicated at the specified position.
@@ -106,7 +106,7 @@ class MTT_Board
 		 *Starting at `position`, places a number of consecutive empty spaces on the board,
 		 *equal to the number represented by `spaces`.
 		 *Relies on calling function to check whether array has enough space.*/
-		void placeSpaces(Position position, s_t spaces);
+		void placeSpaces(Position position, uint8_t spaces);
 	
 	
 	public:
@@ -140,7 +140,7 @@ class MTT_Board
 		 *ie. [0 - (ROWS-1)] and [0 - (COLUMNS - 1)], respectively.
 		 *Returns false iff the move is out of bounds,
 		 *or the target square is already occupied*/
-		bool makeMove(s_t row, s_t column);
+		bool makeMove(uint8_t row, uint8_t column);
 		
 		
 		/*Returns true iff either the game has gone on for the maximum possible number of turns,
@@ -154,7 +154,7 @@ class MTT_Board
 		
 		
 		//COMMENT OUT IF NOT TESTING.
-		s_t getNumMoves() const { return numberOfMoves; }
+		uint16_t getNumMoves() const { return numberOfMoves; }
 		
 		
 		/*Returns a string describing the current board position,
@@ -167,7 +167,7 @@ class MTT_Board
 		 *Function is successful iff the symbol on the target position matches the
 		 *previous turn player, and the position is in bounds.
 		 *Function returns true if successful, and false if not.*/
-		bool undoMove(s_t row, s_t col);
+		bool undoMove(uint8_t row, uint8_t col);
 };
 
 
