@@ -168,6 +168,11 @@ class MTT_Board
 		 *previous turn player, and the position is in bounds.
 		 *Function returns true if successful, and false if not.*/
 		bool undoMove(uint8_t row, uint8_t col);
+
+
+		/* Places tokens on the board based on the string passed to it
+		 * Throws various exceptions if the string is invalid.*/
+		void setBoard(const std::string boardPosition);
 };
 
 

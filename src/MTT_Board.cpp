@@ -27,170 +27,9 @@ MTT_Board::MTT_Board()
 
 
 //Parameterized constructor.
-MTT_Board::MTT_Board(std::string boardPosition)
+MTT_Board::MTT_Board(const std::string boardPosition)
 {
-	numberOfMoves = 0;
-	gameOver = false;
-
-	enum State { FILL_BOARD, GET_TURN };
-	State curState = FILL_BOARD;
-	Position curPos{0, 0};
-	bool positionComplete = false;
-	uint16_t squaresFilled = 0;
-	uint16_t totalSquares = 0;
-	uint8_t consecutiveBlanks = 0;
-	char curChar;
-
-	//Analyze the portion of the string which depicts the placement of tokens on the board.
-	for (s_t index = 0; index < boardPosition.size(); index++)
-	{
-		curChar = boardPosition[index];
-
-		if (positionComplete)
-		{
-			throw std::invalid_argument("Unexpected characters after Turn Player token.");
-		}
-		else
-		{
-			switch (curChar)
-			{
-
-				case 'X':
-				case 'O':
-				case 'Y':
-					switch (curState)
-					{
-						/*In this case, the character represents a token,
-						 *make sure curPos is in bounds.
-						 *If it is, check to make sure the row has enough space for unplaced blanks and the current token.
-						 *If it does, place said spaces and the token on the board in the correct positions,
-						 *and prepare the loop to move on to the next column.
-						 *If not, throw an exception.*/
-						case FILL_BOARD:
-							if ((squaresFilled + consecutiveBlanks + 1) <= COLUMNS)
-							{
-								/*Place any spaces that may be there,
-								 *and update local variables to reflect this.*/
-								placeSpaces(curPos, consecutiveBlanks);
-								squaresFilled += consecutiveBlanks;
-								totalSquares += consecutiveBlanks;
-								curPos.col += consecutiveBlanks;
-
-								/*Place the indicated token on the board,
-								 *updating object and local variables.*/
-								placeToken(curPos, curChar);
-								curPos.col++;
-								numberOfMoves++;
-								squaresFilled++;
-								totalSquares++;
-								consecutiveBlanks = 0;
-							}
-							else
-							{
-								throw std::invalid_argument("Invalid position; Indicated tokens do not fit on row.");
-							}
-							break;
-
-						//Set the turn player, and set the positionComplete flag.
-						case GET_TURN:
-							turnPlayer = static_cast<Token>(curChar);
-							positionComplete = true;
-							break;
-
-						default:
-							throw std::logic_error("This shouldn't be possible.");
-					}
-					break;
-
-				/*In the FILL_BOARD state, update the number of blanks.
-				 *In all other states, throw an exception.*/
-				case '0':
-				case '1':
-				case '2':
-				case '3':
-				case '4':
-				case '5':
-				case '6':
-				case '7':
-				case '8':
-				case '9':
-					switch (curState)
-					{
-						case FILL_BOARD:
-							consecutiveBlanks *= 10;
-							consecutiveBlanks += (curChar-48);	//Convert from a character representing a digit to the number.
-							break;
-
-						default:
-							throw std::invalid_argument("Invalid string; integer character in unexpected location.");
-					}
-					break;
-
-				/*In the FILL_BOARD state, first make sure all squares in the row have either all been filled,
-				 *or been shown to be blank.
-				 *Next, make sure more rows remain.
-				 *If they do, fill in any unmarked blanks and move on to the next row.
-				 *If not, or if not in the FILL_BOARD state, throw an exception.*/
-				case '/':
-					switch (curState)
-					{
-						case FILL_BOARD:
-							//I subtract 1 from ROWS because I'm comparing it to an index.
-							if ((squaresFilled+consecutiveBlanks) == COLUMNS && curPos.row < (ROWS-1))
-							{
-								/*Place any blanks that may be there.*/
-								placeSpaces(curPos, consecutiveBlanks);
-								squaresFilled += consecutiveBlanks;
-								totalSquares += consecutiveBlanks;
-								consecutiveBlanks = 0;
-
-								//Move on to the next row.
-								curPos.row++;
-								curPos.col = 0;
-								squaresFilled = 0;
-							}
-							else
-							{
-								throw std::invalid_argument("Invalid string; not all squares in row accounted for.");
-							}
-							break;
-
-						default:
-							throw std::invalid_argument("Invalid string; slash character in unexpected location.");
-					}
-					break;
-
-				/*In FILL_BOARD state, make sure any unplaced spaces will completely fill the board.
-				 *If they do, place said spaces, and change curState to GET_TURN.
-				 *If not, throw an exception.
-				 *In any other state, throw an exception.*/
-				case ' ':
-					switch (curState)
-					{
-						case FILL_BOARD:
-							if (totalSquares + consecutiveBlanks == (ROWS*COLUMNS))
-							{
-								placeSpaces(curPos, consecutiveBlanks);
-								curState = GET_TURN;
-							}
-							else
-							{
-								throw std::invalid_argument("Invalid position string; not all squares on row are accounted for.");
-							}
-							break;
-
-						default:
-							throw std::invalid_argument("Invalid position string; space character in unexpected location.");
-					}
-					break;
-
-				/*If the character is anything else, throw an exception.*/
-				default:
-					throw std::invalid_argument("Invalid position string; illegal character detected.");
-					break;
-			}
-		}
-	}
+	setBoard(boardPosition);
 }
 
 
@@ -466,5 +305,174 @@ void MTT_Board::placeSpaces(Position position, uint8_t spaces)
 	{
 		placeToken(position, NONE);
 		position.col++;
+	}
+}
+
+
+void MTT_Board::setBoard(const std::string boardPosition)
+{
+	//Assume we're starting from a fresh new board.
+	numberOfMoves = 0;
+	gameOver = false;
+
+	//Local variables for this function specifically.
+	enum State { FILL_BOARD, GET_TURN };
+	State curState = FILL_BOARD;
+	Position curPos{0, 0};
+	bool positionComplete = false;
+	uint16_t squaresFilled = 0;
+	uint16_t totalSquares = 0;
+	uint8_t consecutiveBlanks = 0;
+	char curChar;
+
+	//Analyze the portion of the string which depicts the placement of tokens on the board.
+	for (s_t index = 0; index < boardPosition.size(); index++)
+	{
+		curChar = boardPosition[index];
+
+		if (positionComplete)
+		{
+			throw std::invalid_argument("Unexpected characters after Turn Player token.");
+		}
+		else
+		{
+			switch (curChar)
+			{
+
+				case 'X':
+				case 'O':
+				case 'Y':
+					switch (curState)
+					{
+						/*In this case, the character represents a token,
+						 *make sure curPos is in bounds.
+						 *If it is, check to make sure the row has enough space for unplaced blanks and the current token.
+						 *If it does, place said spaces and the token on the board in the correct positions,
+						 *and prepare the loop to move on to the next column.
+						 *If not, throw an exception.*/
+						case FILL_BOARD:
+							if ((squaresFilled + consecutiveBlanks + 1) <= COLUMNS)
+							{
+								/*Place any spaces that may be there,
+								 *and update local variables to reflect this.*/
+								placeSpaces(curPos, consecutiveBlanks);
+								squaresFilled += consecutiveBlanks;
+								totalSquares += consecutiveBlanks;
+								curPos.col += consecutiveBlanks;
+
+								/*Place the indicated token on the board,
+								 *updating object and local variables.*/
+								placeToken(curPos, curChar);
+								curPos.col++;
+								numberOfMoves++;
+								squaresFilled++;
+								totalSquares++;
+								consecutiveBlanks = 0;
+							}
+							else
+							{
+								throw std::invalid_argument("Invalid position; Indicated tokens do not fit on row.");
+							}
+							break;
+
+						//Set the turn player, and set the positionComplete flag.
+						case GET_TURN:
+							turnPlayer = static_cast<Token>(curChar);
+							positionComplete = true;
+							break;
+
+						default:
+							throw std::logic_error("This shouldn't be possible.");
+					}
+					break;
+
+				/*In the FILL_BOARD state, update the number of blanks.
+				 *In all other states, throw an exception.*/
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9':
+					switch (curState)
+					{
+						case FILL_BOARD:
+							consecutiveBlanks *= 10;
+							consecutiveBlanks += (curChar-48);	//Convert from a character representing a digit to the number.
+							break;
+
+						default:
+							throw std::invalid_argument("Invalid string; integer character in unexpected location.");
+					}
+					break;
+
+				/*In the FILL_BOARD state, first make sure all squares in the row have either all been filled,
+				 *or been shown to be blank.
+				 *Next, make sure more rows remain.
+				 *If they do, fill in any unmarked blanks and move on to the next row.
+				 *If not, or if not in the FILL_BOARD state, throw an exception.*/
+				case '/':
+					switch (curState)
+					{
+						case FILL_BOARD:
+							//I subtract 1 from ROWS because I'm comparing it to an index.
+							if ((squaresFilled+consecutiveBlanks) == COLUMNS && curPos.row < (ROWS-1))
+							{
+								/*Place any blanks that may be there.*/
+								placeSpaces(curPos, consecutiveBlanks);
+								squaresFilled += consecutiveBlanks;
+								totalSquares += consecutiveBlanks;
+								consecutiveBlanks = 0;
+
+								//Move on to the next row.
+								curPos.row++;
+								curPos.col = 0;
+								squaresFilled = 0;
+							}
+							else
+							{
+								throw std::invalid_argument("Invalid string; not all squares in row accounted for.");
+							}
+							break;
+
+						default:
+							throw std::invalid_argument("Invalid string; slash character in unexpected location.");
+					}
+					break;
+
+				/*In FILL_BOARD state, make sure any unplaced spaces will completely fill the board.
+				 *If they do, place said spaces, and change curState to GET_TURN.
+				 *If not, throw an exception.
+				 *In any other state, throw an exception.*/
+				case ' ':
+					switch (curState)
+					{
+						case FILL_BOARD:
+							if (totalSquares + consecutiveBlanks == (ROWS*COLUMNS))
+							{
+								placeSpaces(curPos, consecutiveBlanks);
+								curState = GET_TURN;
+							}
+							else
+							{
+								throw std::invalid_argument("Invalid position string; not all squares on row are accounted for.");
+							}
+							break;
+
+						default:
+							throw std::invalid_argument("Invalid position string; space character in unexpected location.");
+					}
+					break;
+
+				/*If the character is anything else, throw an exception.*/
+				default:
+					throw std::invalid_argument("Invalid position string; illegal character detected.");
+					break;
+			}
+		}
 	}
 }
