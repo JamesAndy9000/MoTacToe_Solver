@@ -1,7 +1,7 @@
-#ifndef SOLVER_H
-#define SOLVER_H
+#ifndef SOLVER_HPP
+#define SOLVER_HPP
 
-#include "MTT_Board.hpp"
+#include "mtt_board.hpp"
 #include <unordered_set>
 #include <stack>
 

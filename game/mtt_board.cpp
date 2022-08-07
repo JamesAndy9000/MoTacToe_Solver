@@ -1,4 +1,4 @@
-#include "MTT_Board.hpp"
+#include "mtt_board.hpp"
 #include <cmath>	//abs()
 
 

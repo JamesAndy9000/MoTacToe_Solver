@@ -1,5 +1,5 @@
-#ifndef MTT_BOARD_H
-#define MTT_BOARD_H
+#ifndef MTT_BOARD_HPP
+#define MTT_BOARD_HPP
 #include <string>
 #include <array>
 #include <unordered_set>

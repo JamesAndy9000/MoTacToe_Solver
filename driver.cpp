@@ -1,5 +1,5 @@
 #include <iostream>
-#include "MTT_Board.hpp"
+#include "mtt_board.hpp"
 
 void printMenu();
 
