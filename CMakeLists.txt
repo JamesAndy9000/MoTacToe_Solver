@@ -5,6 +5,6 @@ add_subdirectory(game)
 
 add_subdirectory(solver)
 
-add_executable(driver driver.cpp)
+add_executable(test test.cpp)
 
-target_link_libraries(driver PRIVATE game solver)
+target_link_libraries(test PRIVATE game solver)
