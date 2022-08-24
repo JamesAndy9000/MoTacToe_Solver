@@ -2,7 +2,7 @@
 A simple automated solver for a version of Tic-Tac-Toe that has 3 players instead of 2.
 
 ## Description
-This is a personal project I started after getting intrigued by a game called Tic-Tac-Moe, which is like Tic-Tac-Toe, but on a 5x5 grid and having 3 players instead of 2. (Yes, I did misremember the name while making the project.) It is meant to generate a game tree and see if a player can force a victory- or at least a draw- from any position, just like someone would with regular Tic-Tac-Toe.
+This is a personal project I started after getting intrigued by a game called Tic-Tac-Moe, which is like Tic-Tac-Toe, but on a 5x5 grid and having 3 players instead of 2. (Yes, I did misremember the name while making the project.) It is meant to answer one question: if all three players are semi-competent Tic-Tac-Moe players- that is, they will always play a move that immediately wins for them, and will block a move that immediately wins for the next player- is it EVER possible for player 1 to win?
 
 ## Installing
 This project uses CMake. If you do not have CMake, installation instructions can be found [here](https://cmake.org/install/).
