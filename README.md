@@ -12,3 +12,5 @@ After cloning the repository, create a build folder at the location of your choo
 After running CMake, navigate to your build folder and simply run `make`. If everything has been set up correctly, all executables should then compile successfully.
 
 ## Running
+### IMPORTANT: This section will be updated as new executables are added.
+Currently, The project only contains one executable: `test`, which tests the basic functionality of the Moe-Tac-Toe board. To run this program, simply navigate to your build folder via your command line, and call `./test`. If you are using Windows, run call `./test.exe` instead.
